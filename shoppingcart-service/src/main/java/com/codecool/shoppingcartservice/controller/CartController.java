@@ -14,8 +14,8 @@ public class CartController {
     @Autowired
     private Cart cart;
 
-    @PostMapping(value = "/addItemToCart/user/{buyerId}/product/{id}")
-    public void addItemToCart(@PathVariable(value = "buyerId") Integer buyerId, @PathVariable(value = "id") Integer giftId) {
+    @PostMapping(value = "/addItemToCart")
+    public void addItemToCart(@RequestParam(value = "buyerId") Integer buyerId, @RequestParam(value = "giftId") Integer giftId) {
         if (cartRepository.findByBuyerId(buyerId) == null) {
             cart = new Cart(buyerId);
             cart.addItemToCart(giftId);
@@ -29,10 +29,18 @@ public class CartController {
     }
 
 
+    @DeleteMapping(value = "/itemsInCart/delete")
+    public void deleteItemFromShoppingCart(@RequestParam(value = "buyerId") Integer buyerId, @RequestParam(value = "giftId") Integer giftId) {
+        if (cartRepository.findByBuyerId(buyerId) != null) {
+            cart = cartRepository.findByBuyerId(buyerId);
+            cart.getGiftsInCart().remove(giftId);
+        } else {
+            return;
+        }
+    }
 
-
-    @GetMapping(value = "/itemsInCart/user/{buyerId}")
-    public String getItemsInCart(@PathVariable(value = "buyerId") Integer buyerId) {
+    @GetMapping(value = "/itemsInCart/user")
+    public String getItemsInCart(@RequestParam(value = "buyerId") Integer buyerId) {
         if (cartRepository.findByBuyerId(buyerId) == null) {
             return "empty";
         } else {
