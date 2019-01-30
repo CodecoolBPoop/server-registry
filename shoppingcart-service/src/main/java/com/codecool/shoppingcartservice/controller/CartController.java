@@ -18,7 +18,7 @@ public class CartController {
 
     @PostMapping(value = "/addItemToCart/user/{buyerId}/product/{id}")
     public void addItemToCart(@PathVariable(value = "buyerId") Integer buyerId, @PathVariable(value = "id") Integer giftId) {
-        if (cartRepository.findByBuyerIdAndId(buyerId, giftId) == null) {
+        if (cartRepository.findByBuyerId(buyerId) == null) {
             cart = new Cart(buyerId);
             cart.addItemToCart(giftId);
             cartRepository.save(cart);
