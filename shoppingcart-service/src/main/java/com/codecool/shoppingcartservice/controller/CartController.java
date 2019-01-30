@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.*;
 public class CartController {
 
     @Autowired
-    private CartService cartService;
-    @Autowired
     private CartRepository cartRepository;
     @Autowired
     private Cart cart;
@@ -30,8 +28,11 @@ public class CartController {
         }
     }
 
-    @GetMapping(value = "/itemsInCart")
-    public String getItemsInCart(@RequestParam(value = "buyerId") Integer buyerId) {
+
+
+
+    @GetMapping(value = "/itemsInCart/user/{buyerId}")
+    public String getItemsInCart(@PathVariable(value = "buyerId") Integer buyerId) {
         if (cartRepository.findByBuyerId(buyerId) == null) {
             return "empty";
         } else {
