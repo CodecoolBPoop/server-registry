@@ -14,16 +14,16 @@ public class Cart {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     @ElementCollection(targetClass = Integer.class)
-    private List<Integer> giftsInCart = new ArrayList<>();
+    private List<Integer> productInCart = new ArrayList<>();
     private int buyerId;
 
 
     public void addItemToCart(Integer giftId) {
-        giftsInCart.add(giftId);
+        productInCart.add(giftId);
     }
 
     public void removeItemFromCart(Integer giftId) {
-        giftsInCart.remove(giftId);
+        productInCart.remove(giftId);
     }
 
     public Cart(int buyerId) {
@@ -33,12 +33,12 @@ public class Cart {
     public Cart() {
     }
 
-    public List<Integer> getGiftsInCart() {
-        return giftsInCart;
+    public List<Integer> getProductInCart() {
+        return productInCart;
     }
 
-    public void setGiftsInCart(List<Integer> giftsInCart) {
-        this.giftsInCart = giftsInCart;
+    public void setProductInCart(List<Integer> productInCart) {
+        this.productInCart = productInCart;
     }
 
     public int getBuyerId() {
