@@ -1,15 +1,17 @@
 package com.codecool.shoppingcartservice.controller;
 
 import com.codecool.shoppingcartservice.model.Cart;
+import com.codecool.shoppingcartservice.model.Product;
 import com.codecool.shoppingcartservice.repository.CartRepository;
 import com.codecool.shoppingcartservice.service.CartService;
-import com.katonarobert.microserviceproduct.model.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = {"*"})
 public class CartController {
 
     @Autowired
@@ -20,15 +22,17 @@ public class CartController {
     private CartService cartService;
 
     @PostMapping(value = "/addItemToCart")
-    public void addItemToCart(@RequestParam(value = "buyerId") Integer buyerId, @RequestParam(value = "productId") Integer productId) {
-        if (cartRepository.findByBuyerId(buyerId) == null) {
-            cart = new Cart(buyerId);
-            cart.addItemToCart(productId);
+    public void addItemToCart(@RequestBody HashMap<String,String> product) {
+        String productId = product.get("productId");
+        String buyerId = product.get("buyerId");
+        if (cartRepository.findByBuyerId(Integer.parseInt(buyerId)) == null) {
+            cart = new Cart(Integer.parseInt(buyerId));
+            cart.addItemToCart(Integer.parseInt(productId));
             cartRepository.save(cart);
         } else {
-            cart = cartRepository.findByBuyerId(buyerId);
-            cart.setId(buyerId);
-            cart.addItemToCart(productId);
+            cart = cartRepository.findByBuyerId(Integer.parseInt(buyerId));
+            cart.setId(Integer.parseInt(buyerId));
+            cart.addItemToCart(Integer.parseInt(productId));
             cartRepository.save(cart);
         }
     }
@@ -44,8 +48,8 @@ public class CartController {
         }
     }
 
-    @GetMapping(value = "/itemsInCart/user")
-    public List<Product> getItemsInCart(@RequestParam(value = "buyerId") Integer buyerId) {
+    @GetMapping(value = "/itemsInCart/user/{buyerId}")
+    public List<Product> getItemsInCart(@PathVariable(value = "buyerId") int buyerId) {
         if (cartRepository.findByBuyerId(buyerId) == null) {
             return null;
         } else {
